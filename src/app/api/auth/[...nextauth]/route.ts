@@ -37,27 +37,32 @@ const { handlers, auth } = NextAuth({
 
   callbacks: {
     async session({ session, token }) {
-      if (token.sub) {
-        const userWithSubs = await prisma.user.findUnique({
-          where: {
-            id: token.sub,
-          },
-          include: {
-            subscription: true,
-          },
-        });
+      try {
+        if (token.sub) {
+          const userWithSubs = await prisma.user.findUnique({
+            where: {
+              id: token.sub,
+            },
+            include: {
+              subscription: true,
+            },
+          });
 
-        if (userWithSubs) {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { password: _password, ...userWithoutPassword } = userWithSubs;
-          session.user = {
-            ...session.user,
-            ...userWithoutPassword,
-            subscriptions: userWithSubs.subscription,
-          };
+          if (userWithSubs) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { password: _password, ...userWithoutPassword } =
+              userWithSubs;
+            session.user = {
+              ...session.user,
+              ...userWithoutPassword,
+              subscriptions: userWithSubs.subscription,
+            };
+          }
+          session.user.id = token.sub;
         }
+      } catch {
+        return session;
       }
-
       return session;
     },
   },

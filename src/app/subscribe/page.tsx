@@ -35,7 +35,30 @@ export default function SubcribePage() {
         <a href="/login">Log in</a>
       </p>
     );
-  const onSubmit = async (data: SubscriptionFormData) => {};
+  const onSubmit = async (data: SubscriptionFormData) => {
+    setIsSubmitting(true);
+
+    try {
+      const res = await fetch("/api/subscription", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const result = await res.json();
+      if (res.ok) {
+        alert(`Subcribed ${data.plan} for ${data.months} months successfully`);
+        router.push("/dashboard");
+      } else {
+        alert(result.error || "Error server");
+      }
+    } catch (error) {
+      alert("Error server");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
