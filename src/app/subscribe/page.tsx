@@ -39,19 +39,23 @@ export default function SubcribePage() {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch("/api/subscription", {
+      await fetch("/api/subscription", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
-      const result = await res.json();
-      if (res.ok) {
-        alert(`Subcribed ${data.plan} for ${data.months} months successfully`);
-        router.push("/dashboard");
-      } else {
-        alert(result.error || "Error server");
+      const res = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const { url } = await res.json();
+      if (url) {
+        window.location.assign(url);
       }
     } catch (error) {
       alert("Error server");
