@@ -8,7 +8,7 @@ export async function GET(
   {
     params,
   }: {
-    params: { id: string };
+    params: Promise<{ id: string }>;
   }
 ) {
   const session = await auth();
@@ -35,5 +35,7 @@ export async function GET(
       },
     },
   })) as UserWithSub;
-  return NextResponse.json(userWithSubs);
+  const { password, ...userWithoutPassword } = userWithSubs;
+
+  return NextResponse.json(userWithoutPassword);
 }

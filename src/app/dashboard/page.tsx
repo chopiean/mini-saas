@@ -1,17 +1,14 @@
 "use client";
-import React, { useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useUserSubscription } from "@/hooks/useUserSubscription";
 
 const Dashboard = () => {
-  const { status } = useSession();
-  const router = useRouter();
+  const { data: session, status } = useSession();
+  const { data, isLoading, error } = useUserSubscription();
 
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/login");
-    }
-  });
+  if (isLoading) return <p>Loading subscription...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+  if (!session) return <p>Please log in</p>;
   return <div>Dashboard</div>;
 };
 export default Dashboard;
