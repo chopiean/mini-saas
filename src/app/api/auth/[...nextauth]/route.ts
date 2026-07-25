@@ -60,7 +60,8 @@ const { handlers, auth } = NextAuth({
           }
           session.user.id = token.sub;
         }
-      } catch {
+      } catch (error) {
+        console.error("session callback error:", error);
         return session;
       }
       return session;

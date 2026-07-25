@@ -39,13 +39,17 @@ export default function SubcribePage() {
     setIsSubmitting(true);
 
     try {
-      await fetch("/api/subscription", {
+      const subRes = await fetch("/api/subscription", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
+      if (!subRes.ok) {
+        alert("Error server");
+        return;
+      }
       const res = await fetch("/api/create-checkout-session", {
         method: "POST",
         headers: {
