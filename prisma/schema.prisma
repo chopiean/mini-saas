@@ -40,7 +40,7 @@ model Subscriptions {
   userId String
   plan Plan @default(BASIC)
   status Status @default(PENDING)
-  stripId String?
+  stripeId String?
   months Int @default(1)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -57,7 +57,7 @@ model Invoices {
   amount Float
   currency String @default("USD")
   paid Boolean @default(false)
-  stripId String
+  stripeId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

@@ -22,7 +22,7 @@ CREATE TABLE "subscription" (
     "userId" TEXT NOT NULL,
     "plan" "Plan" NOT NULL DEFAULT 'BASIC',
     "status" "Status" NOT NULL DEFAULT 'PENDING',
-    "stripId" TEXT,
+    "stripeId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -36,7 +36,7 @@ CREATE TABLE "invoices" (
     "amount" DOUBLE PRECISION NOT NULL,
     "currency" TEXT NOT NULL DEFAULT 'USD',
     "paid" BOOLEAN NOT NULL DEFAULT false,
-    "stripId" TEXT NOT NULL,
+    "stripeId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
