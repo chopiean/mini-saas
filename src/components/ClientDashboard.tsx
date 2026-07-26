@@ -12,7 +12,7 @@ import {
 } from "recharts";
 
 export default function ClientDashboard() {
-  const { data: userSubs } = useUserSubscription();
+  const { data: userSubs, status } = useUserSubscription();
   const [showChart, setShowChart] = useState(true);
 
   const invoices = userSubs?.subscription.flatMap((sub) => sub.invoices) || [];
