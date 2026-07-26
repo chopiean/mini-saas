@@ -1,34 +1,30 @@
 "use client";
-import { useSession } from "next-auth/react";
-import { useUserSubscription } from "@/hooks/useUserSubscription";
+import { signOut, useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
+import ClientDashboard from "@/src/components/ClientDashboard";
 
 const Dashboard = () => {
   const { data: session, status } = useSession();
-  const { data: userSubs, isLoading, error } = useUserSubscription();
 
-  if (isLoading) return <p>Loading subscription...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-  if (!session) return <p>Please log in</p>;
+  if (!session?.user && status !== "loading") {
+    redirect("/login");
+  }
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mt-4">
-        Dashboard - {session.user.name}
-      </h1>
-      <p>
-        Active Subs:{" "}
-        {userSubs?.subscription.filter((s) => s.status === "ACTIVE").length}
-      </p>
+    <div className="min-h-screen bg-gray-50">
+      <div className="mac-w-7xl mx-auto p-6">
+        <h1 className="text-4xl font-bold mb-6">
+          Dashboard - {session?.user?.name}
+        </h1>
 
-      <ul>
-        {userSubs?.subscription.map((sub) => {
-          return (
-            <li key={sub.id} className="mb-2">
-              Plan: {sub.plan} - Status: {sub.status} - Invoices:{" "}
-              {sub.invoices.length}
-            </li>
-          );
-        })}
-      </ul>
+        <button
+          onClick={() => {
+            signOut();
+          }}
+        >
+          Log out
+        </button>
+      </div>
+      <ClientDashboard></ClientDashboard>
     </div>
   );
 };
